@@ -12,10 +12,13 @@ function prepareFreshStack(root: FiberRootNode) {
 }
 
 export function scheduleUpdateOnFiber(fiber: FiberNode) {
+	// TODO 调度功能
+	// 返回的root是fiberRootNode
 	const root = markUpdateFromFiberToRoot(fiber);
 	renderRoot(root);
 }
 export function markUpdateFromFiberToRoot(fiber: FiberNode) {
+	// 从传入的fiber节点开始，向上“归”找到FiberRootNode
 	let node = fiber;
 	let parent = node.return;
 	while (parent !== null) {
@@ -32,6 +35,7 @@ function renderRoot(root: FiberRootNode) {
 	//初始化
 	prepareFreshStack(root);
 
+	// 执行递归流程
 	do {
 		try {
 			workLoop();
@@ -68,6 +72,7 @@ function commitRoot(root: FiberRootNode) {
 		// beforeMutation
 		// mutation
 		commitMutationEffects(finishWork);
+		// FiberRootNode的current指针指向新的hostRootFiber
 		root.current = finishWork;
 		// layout
 	} else {

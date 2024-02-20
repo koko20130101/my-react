@@ -27,6 +27,7 @@ export const createUpdateQueue = <State>() => {
 	} as UpdateQueue<State>;
 };
 
+// 往updateQueue里增加update
 export const enqueueUpdate = <State>(
 	updateQueue: UpdateQueue<State>,
 	update: Update<State>
@@ -34,14 +35,17 @@ export const enqueueUpdate = <State>(
 	updateQueue.shared.pending = update;
 };
 
+// 消费update   baseState:初始状态，pendingUpdate:要消费的update
 export const processUpdateQueue = <State>(
 	baseState: State,
 	pendingUpdate: Update<State> | null
 ): { memoizedState: State } => {
+	//ReturnType显示指定返回值类型，
 	const result: ReturnType<typeof processUpdateQueue<State>> = {
 		memoizedState: baseState
 	};
 	if (pendingUpdate !== null) {
+		// 消费过程
 		const action = pendingUpdate.action;
 		if (action instanceof Function) {
 			result.memoizedState = action(baseState);

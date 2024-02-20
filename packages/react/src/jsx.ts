@@ -87,6 +87,7 @@ export const jsx = (type: ElementType, config: any, ...maybeChildren: any) => {
 	const maybeChildrenLength = maybeChildren.length;
 	// 通过剩余的参数长度判断当前的组件是否有子组件
 	if (maybeChildrenLength) {
+		// child   [child,child,child]
 		if (maybeChildrenLength === 1) {
 			props.children = maybeChildren[0];
 		} else {

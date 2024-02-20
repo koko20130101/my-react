@@ -22,6 +22,7 @@ export class FiberNode {
 	flags: Flags;
 	subtreeFlags: Flags;
 	updateQueue: unknown;
+	deletions: FiberNode[] | null;
 
 	constructor(tag: WorkTag, pendingProps: Props, key: Key) {
 		// 实例
@@ -50,11 +51,13 @@ export class FiberNode {
 		// 副作用
 		this.flags = NoFlags;
 		this.subtreeFlags = NoFlags;
+		this.deletions = null;
 	}
 }
 
+// ReactDOM.createRoot(rootElement).render(<App/>)
 export class FiberRootNode {
-	container: Container;
+	container: Container; // 宿主环境的挂载节点Element,即<div id="root"></div>
 	current: FiberNode;
 	finishWork: FiberNode | null;
 	constructor(container: Container, hostRootFiber: FiberNode) {
@@ -83,6 +86,7 @@ export const createWorkInProgress = (
 		wip.pendingProps = pendingProps;
 		wip.flags = NoFlags;
 		wip.subtreeFlags = NoFlags;
+		wip.deletions = null;
 	}
 
 	wip.type = current.type;

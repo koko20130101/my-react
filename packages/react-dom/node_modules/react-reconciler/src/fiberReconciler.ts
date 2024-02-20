@@ -10,6 +10,9 @@ import {
 import { ReactElementType } from 'shared/ReactTypes';
 import { scheduleUpdateOnFiber } from './workLoop';
 
+// ReactDOM.createRoot(rootElement).render(<App/>)
+// createRoot方法时会调用createContainer
+// 创建FiberRootNode和rootFiber
 export function createContainer(container: Container) {
 	const hostRootFiber = new FiberNode(HostRoot, {}, null);
 	const root = new FiberRootNode(container, hostRootFiber);
@@ -17,6 +20,8 @@ export function createContainer(container: Container) {
 	return root;
 }
 
+// ReactDOM.createRoot(rootElement).render(<App/>)
+// 调用rander方法时会调用updateContainer
 export function updateContainer(
 	element: ReactElementType | null,
 	root: FiberRootNode

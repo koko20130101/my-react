@@ -11,7 +11,11 @@ import {
 	HostRoot,
 	FunctionComponent
 } from './workTags';
-import { NoFlags } from './fiberFlags';
+import { NoFlags, Update } from './fiberFlags';
+
+function markUpdate(fiber: FiberNode) {
+	fiber.flags |= Update;
+}
 
 // 递归中的归
 export const completeWork = (wip: FiberNode) => {
@@ -35,6 +39,12 @@ export const completeWork = (wip: FiberNode) => {
 		case HostText:
 			if (current !== null && wip.stateNode) {
 				// update
+				const oldText = current.memoizedProps.content;
+				const newText = newProps.content;
+				if (oldText !== newText) {
+					// 打上Update标签
+					markUpdate(wip);
+				}
 			} else {
 				// 1.构建DOM
 				const instance = createTextInstance(newProps.content);
@@ -81,6 +91,7 @@ function appendAllChildren(parent: Container, wip: FiberNode) {
 }
 
 function bubbleProperties(wip: FiberNode) {
+	// 向上冒泡
 	let subtreeFlags = NoFlags;
 	let child = wip.child;
 
